@@ -231,13 +231,6 @@
 // export default Search;
 
 
-
-
-
-
-
-
-
 import React, {Component} from 'react';
 import axios from 'axios';
 
@@ -248,26 +241,64 @@ class Search extends Component {
         super(props);
         this.state = {
             persons: {},
+            input: 'cat',
+            input1: 'dog',
+            val: []
 
         };
     }
 
+
+
+
+    handleChange = (event) =>  {
+              this.setState({input : event.target.value})
+        const st = this.state.input1
+        this.state.val.push(this.state.input)
+        const {stateVal} = this.state.val
+
+        console.log(this.state.val);
+
+
+    }
+
+    handleClick = () => {
+        this.setState({input1: this.state.input})
+    }
+
+
+
     componentDidMount() {
-        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=cat&format=json&nojsoncallback=1`)
+        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${this.state.input}&format=json&nojsoncallback=1`)
             .then(res => {
-                this.setState({persons:res.data.photos.photo})
+                this.setState({persons: res.data.photos.photo})
             });
     }
 
+
+
+
+
     render() {
         const data = this.state.persons;
-        console.log(data);
+        // console.log(data);
+        console.log(this.state.input1);
+        console.log(this.state.val);
+
 
         return (
             <div>
-                {Object.keys(data).map((index,key) =>
-                    <img src={`http://farm${data[index]['farm']}.staticflickr.com/${data[index]['server']}/${data[index]['id']}_${data[index]['secret']}.jpg`}
-                         key={`${data[index]['id']}`} alt={`${data[index]['title']}`} width={200} height={200}/>
+                <div>
+
+
+                    <input type="text"  onChange={this.handleChange}/>
+                    <button onClick={this.handleClick}>Search</button>
+                </div>
+
+                {Object.keys(data).map((index, key) =>
+                    <img
+                        src={`http://farm${data[index]['farm']}.staticflickr.com/${data[index]['server']}/${data[index]['id']}_${data[index]['secret']}.jpg`}
+                        key={`${data[index]['id']}`} alt={`${data[index]['title']}`} width={200} height={200}/>
                 )}
 
             </div>

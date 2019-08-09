@@ -249,10 +249,8 @@ class Search extends Component {
     }
 
 
-
-
-    handleChange = (event) =>  {
-              this.setState({input : event.target.value})
+    handleChange = (event) => {
+        this.setState({input: event.target.value})
         const st = this.state.input1
         this.state.val.push(this.state.input)
         const {stateVal} = this.state.val
@@ -267,16 +265,12 @@ class Search extends Component {
     }
 
 
-
     componentDidMount() {
         axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${this.state.input}&format=json&nojsoncallback=1`)
             .then(res => {
                 this.setState({persons: res.data.photos.photo})
             });
     }
-
-
-
 
 
     render() {
@@ -287,20 +281,29 @@ class Search extends Component {
 
 
         return (
-            <div>
+            <div id="chief">
                 <div>
 
 
-                    <input type="text"  onChange={this.handleChange}/>
-                    <button onClick={this.handleClick}>Search</button>
+                    <input type="text" className="search" onChange={this.handleChange}/>
+                    <button className="button" onClick={this.handleClick}>Search</button>
                 </div>
+                <div className="images">
+                    {Object.keys(data).map((index, key) =>
+                        <img
+                            src={`http://farm${data[index]['farm']}.staticflickr.com/${data[index]['server']}/${data[index]['id']}_${data[index]['secret']}.jpg`}
+                            key={`${data[index]['id']}`} alt={`${data[index]['title']}`}/>
+                    )}
+                </div>
+                <div className="chiefDnD">
+                    <div className="Drag">
+                        Cat
+                    </div>
 
-                {Object.keys(data).map((index, key) =>
-                    <img
-                        src={`http://farm${data[index]['farm']}.staticflickr.com/${data[index]['server']}/${data[index]['id']}_${data[index]['secret']}.jpg`}
-                        key={`${data[index]['id']}`} alt={`${data[index]['title']}`} width={200} height={200}/>
-                )}
-
+                    <div className="Drop">
+                        Dog
+                    </div>
+                </div>
             </div>
         );
     }

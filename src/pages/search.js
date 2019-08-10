@@ -231,6 +231,114 @@
 // export default Search;
 
 
+// import React, {Component} from 'react';
+// import axios from 'axios';
+//
+// // const API_KEY = '6782ed995849dfbda1ce0c35459ef8da'
+//
+// class Search extends Component {
+//      constructor(props) {
+//         super(props);
+//         this.state =
+//             {
+//                 imagesData: {},
+//                 searchValue: 'owl',
+//                 input: 'cat',
+//                 input1: 'dog',
+//
+//             };
+//     }
+//
+//
+//
+// handleChange = ({target: {value}}) => {
+//     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${value}&format=json&nojsoncallback=1&per_page=10`)
+//         .then(res => {
+//              this.setState({persons:res.data.photos})
+//             }
+//         );
+//
+//     this.setState({searchValue: value})
+// };
+//     handleClick = () => {
+//
+//         const inputVal = [];
+//         const inputState = this.state.input
+//         inputVal.push(inputState);
+//         // console.log(inputVal[0]);
+//         this.setState({value: inputVal})
+//         // console.log(this.state.value);
+//
+//
+//
+//     };
+//
+//
+//     // fetchData = async (page) => {
+//     //     this.setState({data: {}})
+//     //
+//     //     const data = await fetch('https://reqres.in/api/unknown?page=' + page)
+//     //         .then(r => r.json());
+//     //
+//     //     this.setState({data})
+//
+//     // }
+//
+//
+//     componentDidMount = (val) => {
+//
+//         this.setState({value:{}});
+//        const data =  axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${this.state.value}/&format=json&nojsoncallback=1`)
+//             .then(res => {
+//                 this.setState({persons: res.data.photos.photo})
+//             });
+//
+// this.setState({value: data})
+//         console.log(this.state.value);
+//
+//     }
+//
+//
+//     render() {
+//         const data = this.state.persons;
+//         // console.log(data);
+//         // console.log(this.state.input1);
+//         // console.log(this.state.val);
+//
+//
+//         return (
+//             <div id="chief">
+//                 <div>
+//
+//                     <input type="text"  className="search" onChange={this.handleChange}/>
+//                     <button className="button" onClick={this.handleClick}>Search</button>
+//                 </div>
+//                 <div className="images">
+//                     {Object.keys(data).map((index, key) =>
+//                         <img
+//                             src={`http://farm${data[index]['farm']}.staticflickr.com/${data[index]['server']}/${data[index]['id']}_${data[index]['secret']}.jpg`}
+//                             key={`${data[index]['id']}`} alt={`${data[index]['title']}`}/>
+//                     )}
+//                 </div>
+//                 <div className="chiefDnD">
+//                     <div className="Drag">
+//                         Cat
+//                     </div>
+//
+//                     <div className="Drop">
+//                         Dog
+//                     </div>
+//                 </div>
+//             </div>
+//         );
+//     }
+// }
+//
+// export default Search;
+
+
+
+
 import React, {Component} from 'react';
 import axios from 'axios';
 
@@ -239,73 +347,91 @@ import axios from 'axios';
 class Search extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            persons: {},
-            input: 'cat',
-            input1: 'dog',
-            val: []
-
-        };
+        this.state =
+            {
+                imagesData: {},
+                searchValue: 'owl',
+                input: 'cat',
+                input1: 'dog',
+                page: 1,
+                totalPage: 0,
+            };
     }
 
+    handleChange = ({target: {value}}) => {
+        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${value}&format=json&nojsoncallback=1&per_page=10`)
+            .then(res => {
+                    this.setState(
+                        {
+                            imagesData: 'photos' in res.data ? res.data.photos.photo : {},
+                        }
+                    )
+                }
+            );
 
-    handleChange = (event) => {
-        this.setState({input: event.target.value})
-        const st = this.state.input1
-        this.state.val.push(this.state.input)
-        const {stateVal} = this.state.val
+        this.setState({searchValue: value})
+    };
 
-        console.log(this.state.val);
-
-
-    }
 
     handleClick = () => {
-        this.setState({input1: this.state.input})
-    }
+        const {searchValue, page, totalPage, imagesData} = this.state;
+        let nextPage = page < totalPage ? page + 1 : page;
+
+        axios.get(
+            `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${searchValue}&format=json&page=${nextPage}&per_page=10&nojsoncallback=1`
+        ).then(res => {
+                let newImages = 'photos' in res.data ? res.data.photos.photo : {};
+
+                this.setState(
+                    {
+                        imagesData: newImages,
+                        page: nextPage
+                    }
+                )
+            }
+        )
+    };
 
 
     componentDidMount() {
-        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${this.state.input}&format=json&nojsoncallback=1`)
+        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${this.state.searchValue}&format=json&nojsoncallback=1&per_page=10`)
             .then(res => {
-                this.setState({persons: res.data.photos.photo})
-            });
+                    this.setState(
+                        {
+                            imagesData: 'photos' in res.data ? res.data.photos.photo : {},
+                            totalPage: 'photos' in res.data ? res.data.photos.total : 0
+                        }
+                    )
+                }
+            )
     }
 
-
     render() {
-        const data = this.state.persons;
-        // console.log(data);
-        console.log(this.state.input1);
-        console.log(this.state.val);
-
+        const {imagesData, searchValue} = this.state;
 
         return (
             <div id="chief">
                 <div>
-
-
-                    <input type="text" className="search" onChange={this.handleChange}/>
-                    <button className="button" onClick={this.handleClick}>Search</button>
+                    <input type="text" className="search" onChange={this.handleChange} value={searchValue}/>
                 </div>
                 <div className="images">
-                    {Object.keys(data).map((index, key) =>
-                        <img
-                            src={`http://farm${data[index]['farm']}.staticflickr.com/${data[index]['server']}/${data[index]['id']}_${data[index]['secret']}.jpg`}
-                            key={`${data[index]['id']}`} alt={`${data[index]['title']}`}/>
-                    )}
+                    {
+                        Object.keys(imagesData).map((index, key) =>
+                            <img
+                                src={`http://farm${imagesData[index]['farm']}.staticflickr.com/${imagesData[index]['server']}/${imagesData[index]['id']}_${imagesData[index]['secret']}.jpg`}
+                                key={`${imagesData[index]['id']}`} alt={`${imagesData[index]['title']}`}/>
+                        )
+                    }
+                    <div>
+                        {'0' in imagesData ? <button onClick={this.handleClick}>Next Page</button> : ''}
+                    </div>
                 </div>
                 <div className="chiefDnD">
-                    <div className="Drag">
-                        Cat
-                    </div>
-
-                    <div className="Drop">
-                        Dog
-                    </div>
+                    <div className="Drag">Cat</div>
+                    <div className="Drop">Dog</div>
                 </div>
             </div>
-        );
+        )
     }
 }
 

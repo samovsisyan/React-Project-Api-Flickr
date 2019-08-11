@@ -339,10 +339,109 @@
 
 
 
+// import React, {Component} from 'react';
+// import axios from 'axios';
+//
+// // const API_KEY = '6782ed995849dfbda1ce0c35459ef8da'
+//
+// class Search extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.state =
+//             {
+//                 imagesData: {},
+//                 searchValue: 'owl',
+//                 input: 'cat',
+//                 input1: 'dog',
+//                 page: 1,
+//                 totalPage: 0,
+//             };
+//     }
+//
+//     handleChange = ({target: {value}}) => {
+//         axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${value}&format=json&nojsoncallback=1&per_page=10`)
+//             .then(res => {
+//                     this.setState(
+//                         {
+//                             imagesData: 'photos' in res.data ? res.data.photos.photo : {},
+//                         }
+//                     )
+//                 }
+//             );
+//
+//         this.setState({searchValue: value})
+//     };
+//
+//
+//     handleClick = () => {
+//         const {searchValue, page, totalPage, imagesData} = this.state;
+//         let nextPage = page < totalPage ? page + 1 : page;
+//
+//         axios.get(
+//             `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${searchValue}&format=json&page=${nextPage}&per_page=10&nojsoncallback=1`
+//         ).then(res => {
+//                 let newImages = 'photos' in res.data ? res.data.photos.photo : {};
+//
+//                 this.setState(
+//                     {
+//                         imagesData: newImages,
+//                         page: nextPage
+//                     }
+//                 )
+//             }
+//         )
+//     };
+//
+//
+//     componentDidMount() {
+//         axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${this.state.searchValue}&format=json&nojsoncallback=1&per_page=10`)
+//             .then(res => {
+//                     this.setState(
+//                         {
+//                             imagesData: 'photos' in res.data ? res.data.photos.photo : {},
+//                             totalPage: 'photos' in res.data ? res.data.photos.total : 0
+//                         }
+//                     )
+//                 }
+//             )
+//     }
+//
+//     render() {
+//         const {imagesData, searchValue} = this.state;
+//
+//         return (
+//             <div id="chief">
+//                 <div>
+//                     <input type="text" className="search" onChange={this.handleChange} value={searchValue}/>
+//                 </div>
+//                 <div className="images">
+//                     {
+//                         Object.keys(imagesData).map((index, key) =>
+//                             <img
+//                                 src={`http://farm${imagesData[index]['farm']}.staticflickr.com/${imagesData[index]['server']}/${imagesData[index]['id']}_${imagesData[index]['secret']}.jpg`}
+//                                 key={`${imagesData[index]['id']}`} alt={`${imagesData[index]['title']}`}/>
+//                         )
+//                     }
+//                     <div>
+//                         {'0' in imagesData ? <button onClick={this.handleClick}>Next Page</button> : ''}
+//                     </div>
+//                 </div>
+//                 <div className="chiefDnD">
+//                     <div className="Drag">Cat</div>
+//                     <div className="Drop">Dog</div>
+//                 </div>
+//             </div>
+//         )
+//     }
+// }
+//
+// export default Search;
+
+
+
 import React, {Component} from 'react';
 import axios from 'axios';
 
-// const API_KEY = '6782ed995849dfbda1ce0c35459ef8da'
 
 class Search extends Component {
     constructor(props) {
@@ -355,11 +454,14 @@ class Search extends Component {
                 input1: 'dog',
                 page: 1,
                 totalPage: 0,
+                clickPhotoUrl: '/images/embedded-px-px.png',
+                clickPhoto: '',
             };
     }
 
+
     handleChange = ({target: {value}}) => {
-        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${value}&format=json&nojsoncallback=1&per_page=10`)
+        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${value}&format=json&nojsoncallback=1&per_page=40`)
             .then(res => {
                     this.setState(
                         {
@@ -374,11 +476,11 @@ class Search extends Component {
 
 
     handleClick = () => {
-        const {searchValue, page, totalPage, imagesData} = this.state;
+        const {searchValue, page, totalPage} = this.state;
         let nextPage = page < totalPage ? page + 1 : page;
 
         axios.get(
-            `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${searchValue}&format=json&page=${nextPage}&per_page=10&nojsoncallback=1`
+            `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${searchValue}&format=json&page=${nextPage}&per_page=40&nojsoncallback=1`
         ).then(res => {
                 let newImages = 'photos' in res.data ? res.data.photos.photo : {};
 
@@ -394,7 +496,7 @@ class Search extends Component {
 
 
     componentDidMount() {
-        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${this.state.searchValue}&format=json&nojsoncallback=1&per_page=10`)
+        axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=6782ed995849dfbda1ce0c35459ef8da&text=${this.state.searchValue}&format=json&nojsoncallback=1&per_page=40`)
             .then(res => {
                     this.setState(
                         {
@@ -404,16 +506,45 @@ class Search extends Component {
                     )
                 }
             )
+
     }
 
+
+
     render() {
-        const {imagesData, searchValue} = this.state;
+        const {imagesData, searchValue, clickPhotoUrl} = this.state;
+        const clickPhoto = [];
+        clickPhoto.push(clickPhotoUrl);
 
         return (
             <div id="chief">
-                <div>
-                    <input type="text" className="search" onChange={this.handleChange} value={searchValue}/>
+                {/*<div>*/}
+                {/*    <input type="text" className="search" onChange={this.handleChange} value={searchValue}/>*/}
+                {/*</div>*/}
+
+                <div className="s010">
+                    <form>
+                        <div className="inner-form">
+                            <div className="basic-search">
+                                <div className="input-field">
+                                    <input id="search" type="text"
+                                           placeholder="Type Keywords"
+                                           onChange={this.handleChange}
+                                           value={searchValue}/>
+                                    <div className="icon-wrap">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                             viewBox="0 0 24 24">
+                                            <path
+                                                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
+
+
                 <div className="images">
                     {
                         Object.keys(imagesData).map((index, key) =>
@@ -423,13 +554,29 @@ class Search extends Component {
                         )
                     }
                     <div>
-                        {'0' in imagesData ? <button onClick={this.handleClick}>Next Page</button> : ''}
+                        {'0' in imagesData ?
+
+                            <button onClick={this.handleClick}>
+                                Next Page
+                            </button>
+                            : ''}
+
                     </div>
+
                 </div>
                 <div className="chiefDnD">
                     <div className="Drag">Cat</div>
                     <div className="Drop">Dog</div>
                 </div>
+
+
+                {/*{clickPhoto.map((img)=> (*/}
+                {/*<div key={img}>*/}
+                {/*    <img src={img} alt="1"*/}
+                {/*    onClick={this.handleClickPhoto}*/}
+                {/*    />*/}
+                {/*</div>*/}
+                {/*))}*/}
             </div>
         )
     }

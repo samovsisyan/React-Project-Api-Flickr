@@ -1022,9 +1022,7 @@ class Search extends Component {
 
         return (
             <div id="chief">
-                {/*<div>*/}
-                {/*    <input type="text" className="search" onChange={this.handleChange} value={searchValue}/>*/}
-                {/*</div>*/}
+
 
                 <div className="s010">
                     <form>
@@ -1075,13 +1073,6 @@ class Search extends Component {
                 </div>
 
 
-                {/*{clickPhoto.map((img)=> (*/}
-                {/*<div key={img}>*/}
-                {/*    <img src={img} alt="1"*/}
-                {/*    onClick={this.handleClickPhoto}*/}
-                {/*    />*/}
-                {/*</div>*/}
-                {/*))}*/}
             </div>
         )
     }
